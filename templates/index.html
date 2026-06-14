@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Code Reviewer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>AI Code Reviewer</h1>
+        <div id="dropZone" class="drop-zone">
+    <p>📂 Drag & Drop your code file here</p>
+    <p>or</p>
+
+    <input
+        type="file"
+        id="fileInput"
+        accept=".py,.js,.java,.cpp,.c,.cs,.php,.go,.rb,.ts,.html,.css"
+        hidden
+    >
+
+    <button id="browseBtn">
+        Browse Files
+    </button>
+</div>
+        <br><br>
+
+        <select id="language">
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="java">Java</option>
+            <option value="cpp">C++</option>
+            <option value="csharp">C#</option>
+            <option value="go">Go</option>
+        </select>
+
+        <br><br>
+        <div id="editor"></div>
+
+        <button onclick="reviewCode()" id="reviewBtn">
+        Review Code
+        </button>
+        <div class="action-buttons">
+        <button onclick="copyReview()">📋 Copy</button>
+        <button onclick="downloadReview()">⬇️ Download</button>
+        </div>
+        <div id="result-container">
+        <div id="result"></div>
+        </div>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
