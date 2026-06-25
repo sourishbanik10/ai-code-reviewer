@@ -121,7 +121,7 @@ async function reviewCode() {
     btn.innerText = "Reviewing...";
 
     try {
-
+        const startTime = performance.now();
         const response = await fetch("/review", {
             method: "POST",
             headers: {
@@ -139,10 +139,51 @@ async function reviewCode() {
         btn.innerText = "Review Code";
 
         lastReview = data.review;
+        const endTime = performance.now();
 
-        const sections = lastReview.split(/\n(?=\d\.)/g);
+document.getElementById("reviewTime").innerText =
+    ((endTime - startTime) / 1000).toFixed(2) + "s";
+
+document.getElementById("reviewLanguage").innerText =
+    language.toUpperCase();
+        const sections = lastReview.split(/\n(?=# )|\n(?=## )/g);
 
         result.innerHTML = "";
+        // Score
+
+const scoreMatch = lastReview.match(/(\d+(\.\d+)?)\/10/);
+
+document.getElementById("score").innerText =
+    scoreMatch ? scoreMatch[1] + "/10" : "--";
+
+
+// Bugs
+
+const bugs = (
+    lastReview.match(/bug/gi) || []
+).length;
+
+document.getElementById("bugs").innerText = bugs;
+
+
+// Security
+
+const security = (
+    lastReview.match(/security/gi) || []
+).length;
+
+document.getElementById("security").innerText =
+    security;
+
+
+// Performance
+
+const performanceCount = (
+    lastReview.match(/performance/gi) || []
+).length;
+
+document.getElementById("performance").innerText =
+    performanceCount;
 
         sections.forEach((section, index) => {
 

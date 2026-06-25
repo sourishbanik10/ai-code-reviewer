@@ -46,8 +46,47 @@
         <button onclick="downloadReview()">⬇️ Download</button>
         </div>
         <div id="result-container">
-        <div id="result"></div>
-        </div>
+        <!-- Review Dashboard -->
+
+<div id="review-dashboard" class="dashboard-cards">
+
+    <div class="stat-card">
+        <h3>⭐ Score</h3>
+        <span id="score">--</span>
+    </div>
+
+    <div class="stat-card">
+        <h3>🐞 Bugs</h3>
+        <span id="bugs">--</span>
+    </div>
+
+    <div class="stat-card">
+        <h3>🔒 Security</h3>
+        <span id="security">--</span>
+    </div>
+
+    <div class="stat-card">
+        <h3>⚡ Performance</h3>
+        <span id="performance">--</span>
+    </div>
+
+</div>
+
+<div class="review-info">
+
+    <span>🌐 <b id="reviewLanguage">Python</b></span>
+
+    <span>🤖 Gemini 2.5 Flash</span>
+
+    <span>⏱ <b id="reviewTime">0.0s</b></span>
+
+</div>
+
+<div id="result">
+
+    <p>Your AI review will appear here...</p>
+
+</div>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
