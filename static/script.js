@@ -278,3 +278,46 @@ function typeWriter(text, element, speed = 10) {
 
     typing();
 }
+
+async function fixCode() {
+
+    const code = editor.getValue();
+    const language = document.getElementById("language").value;
+
+    const result = document.getElementById("result");
+
+    result.innerHTML = "<h3>✨ AI is improving your code...</h3>";
+
+    try {
+
+        const response = await fetch("/fix", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                code: code,
+                language: language
+            })
+
+        });
+
+        const data = await response.json();
+
+        result.innerHTML = marked.parse(data.result);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        result.innerHTML =
+            "<h3>❌ Failed to improve the code.</h3>";
+
+    }
+
+}

@@ -1,32 +1,37 @@
-import google.generativeai as genai
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
+import google.generativeai as genai
 
+# Load environment variables
 load_dotenv()
 
-# IMPORTANT: use env variable, not hardcoded string
+# Configure Gemini
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
+# Create Gemini model
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 
 def review_with_gemini(code, language):
+    """
+    Generate an AI code review.
+    """
 
     prompt = f"""
-You are an experienced Senior Software Engineer.
+You are a Senior Software Engineer.
 
 Review the following {language} code.
 
 IMPORTANT RULES:
 - Keep the review concise.
-- Do NOT write long paragraphs.
 - Use bullet points only.
+- Do NOT write long paragraphs.
 - Keep each point under 20 words.
 - Do NOT explain obvious things.
-- If there are no issues, simply write "None".
-- Limit the entire review to around 250 words.
+- If there are no issues, write "None".
+- Keep the review under 250 words.
 
-Return ONLY this format:
+Return ONLY in this format:
 
 # Code Review
 
@@ -49,7 +54,7 @@ Return ONLY this format:
 - ...
 
 ## Score
-X/10
+8/10
 
 Code:
 
@@ -61,16 +66,42 @@ Code:
     return response.text
 
 
-    try:
-        response = model.generate_content(
-            prompt,
-            generation_config=genai.GenerationConfig(
-                temperature=0.2,
-                max_output_tokens=600,
-            )
-        )
+def fix_with_gemini(code, language):
+    """
+    Generate an improved version of the submitted code.
+    """
 
-        return response.text
+    prompt = f"""
+You are a Senior Software Engineer.
 
-    except Exception as e:
-        return f"API Error:\n{str(e)}"
+Rewrite the following {language} code into production-quality code.
+
+Rules:
+
+- Fix all bugs.
+- Fix security issues.
+- Improve performance.
+- Follow clean coding practices.
+- Preserve the original functionality.
+- Use meaningful variable names.
+- Add comments only where necessary.
+- Do NOT include explanations outside the requested format.
+
+Return EXACTLY in this format:
+
+# Changes Made
+
+- Fixed ...
+- Improved ...
+- Refactored ...
+
+# Improved Code
+
+```{language}
+<complete improved code>
+{code}
+"""
+
+    response = model.generate_content(prompt)
+
+    return response.text
