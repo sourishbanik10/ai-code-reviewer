@@ -1,4 +1,6 @@
 let lastReview = "";
+let fixedCode = "";
+let originalCode = "";
 let editor;
 require.config({
     paths: {
@@ -282,6 +284,7 @@ function typeWriter(text, element, speed = 10) {
 async function fixCode() {
 
     const code = editor.getValue();
+    originalCode = code; 
     const language = document.getElementById("language").value;
 
     const result = document.getElementById("result");
@@ -307,7 +310,21 @@ async function fixCode() {
 
         const data = await response.json();
 
-        result.innerHTML = marked.parse(data.result);
+        const aiResponse = data.result;
+
+        // Save complete response
+        lastReview = aiResponse;
+
+        // Extract only code block
+        const match = aiResponse.match(/```[\w]*\n([\s\S]*?)```/);
+
+        if (match) {
+            fixedCode = match[1].trim();
+        } else {
+            fixedCode = "";
+        }
+
+        result.innerHTML = marked.parse(aiResponse);
 
     }
 
@@ -319,5 +336,71 @@ async function fixCode() {
             "<h3>❌ Failed to improve the code.</h3>";
 
     }
+
+}
+
+function applyFixes() {
+
+    if (!fixedCode) {
+
+        alert("Generate AI fixes first.");
+
+        return;
+
+    }
+
+    editor.setValue(fixedCode);
+
+    alert("✅ AI fixes applied!");
+
+}
+
+function compareCode() {
+
+    if (!originalCode || !fixedCode) {
+
+        alert("Generate AI fixes first.");
+
+        return;
+
+    }
+
+    const result = document.getElementById("result");
+
+    result.innerHTML = `
+
+        <div class="compare-container">
+
+            <div class="compare-box">
+
+                <h3>Original Code</h3>
+
+                <pre><code>${escapeHtml(originalCode)}</code></pre>
+
+            </div>
+
+            <div class="compare-box">
+
+                <h3>Improved Code</h3>
+
+                <pre><code>${escapeHtml(fixedCode)}</code></pre>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+function escapeHtml(text) {
+
+    return text
+
+        .replace(/&/g, "&amp;")
+
+        .replace(/</g, "&lt;")
+
+        .replace(/>/g, "&gt;");
 
 }

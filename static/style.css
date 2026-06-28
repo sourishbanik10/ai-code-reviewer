@@ -259,3 +259,47 @@ gap:10px;
 }
 
 }
+
+.compare-container{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+}
+
+.compare-box{
+
+    background:#1e293b;
+
+    color:white;
+
+    border-radius:10px;
+
+    padding:15px;
+
+    overflow:auto;
+
+    border:1px solid #334155;
+
+}
+
+.compare-box h3{
+
+    margin-top:0;
+
+    color:#60a5fa;
+
+}
+
+.compare-box pre{
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+
+    font-size:14px;
+
+}
