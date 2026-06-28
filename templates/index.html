@@ -1,117 +1,160 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>AI Code Reviewer</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 </head>
+
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <h1>AI Code Reviewer</h1>
-        <div id="dropZone" class="drop-zone">
-    <p>📂 Drag & Drop your code file here</p>
-    <p>or</p>
+    <h1>🤖 AI Code Reviewer</h1>
 
-    <input
-        type="file"
-        id="fileInput"
-        accept=".py,.js,.java,.cpp,.c,.cs,.php,.go,.rb,.ts,.html,.css"
-        hidden
-    >
+    <!-- Drag & Drop -->
 
-    <button id="browseBtn">
-        Browse Files
-    </button>
-</div>
-        <br><br>
+    <div id="dropZone" class="drop-zone">
 
-        <select id="language">
-            <option value="python">Python</option>
-            <option value="javascript">JavaScript</option>
-            <option value="java">Java</option>
-            <option value="cpp">C++</option>
-            <option value="csharp">C#</option>
-            <option value="go">Go</option>
-        </select>
+        <p>📂 Drag & Drop your code file here</p>
 
-        <br><br>
-        <div id="editor"></div>
+        <p>or</p>
 
-        <div class="action-buttons">
+        <input
+            type="file"
+            id="fileInput"
+            accept=".py,.js,.java,.cpp,.c,.cs,.php,.go,.rb,.ts,.html,.css"
+            hidden
+        >
 
-    <button
-        id="reviewBtn"
-        onclick="reviewCode()"
-    >
-        🔍 Review Code
-    </button>
+        <button id="browseBtn">
+            Browse Files
+        </button>
 
-    <button
-        id="fixBtn"
-        onclick="fixCode()"
-    >
-        ✨ Fix Code
+    </div>
+
+    <br>
+
+    <!-- Language -->
+
+    <select id="language">
+
+        <option value="python">Python</option>
+        <option value="javascript">JavaScript</option>
+        <option value="java">Java</option>
+        <option value="cpp">C++</option>
+        <option value="csharp">C#</option>
+        <option value="go">Go</option>
+
+    </select>
+
+    <br><br>
+
+    <!-- Monaco Editor -->
+
+    <div id="editor"></div>
+
+    <!-- Action Buttons -->
+
+    <div class="action-buttons">
+
+        <button id="reviewBtn" onclick="reviewCode()">
+            🔍 Review Code
+        </button>
+
+        <button id="fixBtn" onclick="fixCode()">
+            ✨ Fix Code
+        </button>
+
         <button onclick="applyFixes()">
-    🚀 Apply Fixes
-</button>
-<button onclick="compareCode()">
-    🔄 Compare Code
-</button>
-    </button>
+            🚀 Apply Fixes
+        </button>
 
-</div>
+        <button onclick="compareCode()">
+            🔄 Compare Code
+        </button>
 
-<div class="action-buttons">
-        <button onclick="copyReview()">📋 Copy</button>
-        <button onclick="downloadReview()">⬇️ Download</button>
+    </div>
+
+    <div class="action-buttons">
+
+        <button onclick="copyReview()">
+            📋 Copy
+        </button>
+
+        <button onclick="downloadReview()">
+            ⬇ Download
+        </button>
+
+    </div>
+
+    <!-- Review Panel -->
+
+    <div id="result-container">
+
+        <!-- Dashboard -->
+
+        <div id="review-dashboard" class="dashboard-cards">
+
+            <div class="stat-card">
+                <h3>⭐ Score</h3>
+                <span id="score">--</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>🐞 Bugs</h3>
+                <span id="bugs">--</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>🔒 Security</h3>
+                <span id="security">--</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>⚡ Performance</h3>
+                <span id="performance">--</span>
+            </div>
+
         </div>
-        <div id="result-container">
-        <!-- Review Dashboard -->
 
-<div id="review-dashboard" class="dashboard-cards">
+        <!-- Review Info -->
 
-    <div class="stat-card">
-        <h3>⭐ Score</h3>
-        <span id="score">--</span>
-    </div>
+        <div class="review-info">
 
-    <div class="stat-card">
-        <h3>🐞 Bugs</h3>
-        <span id="bugs">--</span>
-    </div>
+            <span>🌐 <b id="reviewLanguage">Python</b></span>
 
-    <div class="stat-card">
-        <h3>🔒 Security</h3>
-        <span id="security">--</span>
-    </div>
+            <span>🤖 Gemini 2.5 Flash</span>
 
-    <div class="stat-card">
-        <h3>⚡ Performance</h3>
-        <span id="performance">--</span>
+            <span>⏱ <b id="reviewTime">0.0s</b></span>
+
+        </div>
+
+        <!-- Review / Diff Output -->
+
+        <div id="result">
+
+            <p>Your AI review will appear here...</p>
+
+        </div>
+
     </div>
 
 </div>
 
-<div class="review-info">
-
-    <span>🌐 <b id="reviewLanguage">Python</b></span>
-
-    <span>🤖 Gemini 2.5 Flash</span>
-
-    <span>⏱ <b id="reviewTime">0.0s</b></span>
-
-</div>
-
-<div id="result">
-
-    <p>Your AI review will appear here...</p>
-
-</div>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
+
 </body>
+
 </html>

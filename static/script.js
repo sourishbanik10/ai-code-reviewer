@@ -1,3 +1,4 @@
+let diffEditor = null;
 let lastReview = "";
 let fixedCode = "";
 let originalCode = "";
@@ -367,31 +368,66 @@ function compareCode() {
 
     const result = document.getElementById("result");
 
-    result.innerHTML = `
+    if(diffEditor){
 
-        <div class="compare-container">
-
-            <div class="compare-box">
-
-                <h3>Original Code</h3>
-
-                <pre><code>${escapeHtml(originalCode)}</code></pre>
-
-            </div>
-
-            <div class="compare-box">
-
-                <h3>Improved Code</h3>
-
-                <pre><code>${escapeHtml(fixedCode)}</code></pre>
-
-            </div>
-
-        </div>
-
-    `;
+    diffEditor.dispose();
 
 }
+
+result.innerHTML = `
+    <div id="diffEditor"></div>
+`;
+    diffEditor = monaco.editor.createDiffEditor(
+
+        document.getElementById("diffEditor"),
+
+        {
+
+            theme: "vs-dark",
+
+            automaticLayout: true,
+
+            readOnly: true,
+
+            renderSideBySide: true,
+
+            minimap: {
+
+                enabled: false
+
+            }
+
+        }
+
+    );
+
+    const originalModel = monaco.editor.createModel(
+
+        originalCode,
+
+        document.getElementById("language").value
+
+    );
+
+    const modifiedModel = monaco.editor.createModel(
+
+        fixedCode,
+
+        document.getElementById("language").value
+
+    );
+
+    diffEditor.setModel({
+
+        original: originalModel,
+
+        modified: modifiedModel
+
+    });
+
+}
+
+
 
 function escapeHtml(text) {
 
